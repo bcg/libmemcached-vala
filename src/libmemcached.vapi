@@ -2,7 +2,7 @@
 [CCode(
   cheader_filename = "libmemcached/memcached.h",
   cprefix = "")]
-namespace Memcached {
+namespace LibMemcached {
 
 	[CCode(cname = "size_t")]
 	public struct Size: uint{}
