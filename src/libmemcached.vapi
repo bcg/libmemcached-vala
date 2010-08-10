@@ -4,37 +4,15 @@
   cprefix = "")]
 namespace Memcached {
 
+	[CCode(cname = "size_t")]
+	public struct Size: uint{}
+
+	[CCode(cname = "time_t")]
+	public struct Time : uint{}
 
   [CCode (cname = "memcached_return_t")]
   public struct Return : int {}
 
-/*
-  public struct State {
-    bool is_allocated;
-    bool is_initialized;
-    bool sockaddr_inited;
-    bool is_shutting_down;
-  }
-  public struct Flags {
-    bool auto_eject_hosts;
-    bool binary_protocol;
-    bool buffer_requests;
-    bool cork;
-    bool hash_with_prefix_key;
-    bool ketama_weighted;
-    bool no_block; // Don't block
-    bool no_reply;
-    bool randomize_replica_read;
-    bool reuse_memory;
-    bool support_cas;
-    bool tcp_nodelay;
-    bool use_cache_lookups;
-    bool use_sort_hosts;
-    bool use_udp;
-    bool verify_key;
-    bool tcp_keepalive;
-  }
-*/
   [Compact]
   [CCode (
     cname = "memcached_st", 
@@ -46,6 +24,14 @@ namespace Memcached {
 
     [CCode (cname = "memcached_server_push")]
     public Return server_push(ServerList servers);
+
+    [CCode (cname = "memcached_set")]
+    public Return set(string key, Size key_len, string value, Size value_len,
+                      Time expiration, uint flags);
+
+    [CCode (cname = "memcached_get")]
+    public string get(string key, Size key_len, Size* value_len, uint* flags,
+                      Return* rc);
 
   }
 
@@ -65,7 +51,7 @@ namespace Memcached {
     [CCode (cname = "memcached_server_list_append")]
     public ServerList append(string hostname, int port, Return* error);
 
-    [CCode (cname = "memcached_server_list_count", type_parameters="ServerList")]
+    [CCode (cname = "memcached_server_list_count")]
     public uint count();
 
   }
