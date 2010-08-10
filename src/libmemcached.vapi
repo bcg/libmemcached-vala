@@ -4,11 +4,11 @@
   cprefix = "")]
 namespace LibMemcached {
 
-	[CCode(cname = "size_t")]
-	public struct Size: uint{}
+	//[CCode(cname = "size_t")]
+	//public struct Size: uint{}
 
-	[CCode(cname = "time_t")]
-	public struct Time : uint{}
+	//[CCode(cname = "time_t")]
+	//public struct Time : uint{}
 
   [CCode (cname = "memcached_return_t")]
   public struct Return : int {}
@@ -26,13 +26,12 @@ namespace LibMemcached {
     public Return server_push(ServerList servers);
 
     [CCode (cname = "memcached_set")]
-    public Return set(string key, Size key_len, string value, Size value_len,
-                      Time expiration, uint flags);
+    public Return set(string key, size_t key_len, string value, size_t value_len,
+                      time_t expiration, uint flags);
 
     [CCode (cname = "memcached_get")]
-    public string get(string key, Size key_len, Size* value_len, uint* flags,
-                      Return* rc);
-
+    public string get(string key, size_t key_len, out size_t value_len, out uint flags,
+                      out Return rc);
   }
 
   [Compact]
@@ -48,8 +47,9 @@ namespace LibMemcached {
     [CCode (cname = "memcached_servers_parse")]
     public static ServerList parse(string server_strings);
 
+    [ReturnsModifiedPointer]
     [CCode (cname = "memcached_server_list_append")]
-    public ServerList append(string hostname, int port, Return* error);
+    public ServerList append(string hostname, int port, out Return error);
 
     [CCode (cname = "memcached_server_list_count")]
     public uint count();
